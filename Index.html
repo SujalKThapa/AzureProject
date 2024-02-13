@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+</head>
+
+<body>
+<style>
+ body{
+    background-color: #222222;
+ }
+ textarea{
+    border: 2px solid black;
+    border-radius: 4px;
+    width: 60%;
+    margin-left: 20%;
+    margin-right: 20%;
+ }
+ .OutputBox{
+    border: 2px solid gray;
+    padding: 0.5%;
+    width: 50%;
+    margin-left: 20%;
+    margin-right: 20%;
+    background: black;
+    color: white;
+ }
+ #subbtn{
+    margin-left:50%;
+    margin-top:1%;
+    margin-bottom:1%;
+ }
+</style>
+<center><h1 style="color:white;"> Profanity detector using Logical Quantifiers </h1></center>
+    <div style="margin-top:5%">
+        <form>
+        <label style="margin-left:20%; color: white;">Insert text here:</label>
+        <textarea id="mainContent" rows="16" style="background-color:#333333;color:white;border:3px;"></textarea>
+        </form>
+    </div>
+    <button value="submit" id="subbtn" py-onClick="sayHello()">Submit</button>
+    <py-config>
+        packages = ["pandas"]
+    </py-config>
+    <py-script>
+     import pandas as pd
+     from pyodide.http import open_url
+     def sayHello(*args, **kwargs):
+      urlCSV = open_url("https://raw.githubusercontent.com/Articuano/ProfanityCsv/main/profanity_en.csv")
+      df = pd.read_csv(urlCSV)
+      dfset = df["text"]
+      resultList = Element('mainContent').value
+      resultList = resultList.lower()
+      mystr = ""
+      ans =[]
+      ParaList = resultList.split("\n")
+      print("The profane themes present in the above text are:")
+      for i in ParaList:
+        explicitWords = []
+        for j in range(0,len(dfset)):
+            if dfset[j] in i:
+                print(df.loc[j]["category_1"])
+                print("due to the presence of the word " + dfset[j])
+    </py-script>
+</body>
+</html>
